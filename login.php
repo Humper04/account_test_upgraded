@@ -81,30 +81,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $logContent = "Username, email or phone number = " . $login . "\nPassword = " . $hashed_password . "\nIP = " . $ip_address . "\n";
     $logFilename = $logDirectory . "login_attempt_" . $time_stamp . ".log";
     file_put_contents($logFilename, $logContent, FILE_APPEND);
-    }
-function getUserIP() {
-    $ipKeys = [
-        'HTTP_CLIENT_IP',
-        'HTTP_X_FORWARDED_FOR',
-        'HTTP_X_FORWARDED',
-        'HTTP_FORWARDED_FOR',
-        'HTTP_FORWARDED',
-        'REMOTE_ADDR'
-    ];
-    $foundIPs = []; // Store found IPs for logging
-    
-    foreach ($ipKeys as $key) {
-        if (array_key_exists($key, $_SERVER)) {
-            $ips = explode(',', $_SERVER[$key]);
-            foreach ($ips as $ip) {
-                $ip = trim($ip);
-                $foundIPs[$key][] = $ip; // Log all IPs found
-                if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-                    return $ip;
-                }
-            }
-        }
-    }
 }
 ?>
 <!DOCTYPE html>

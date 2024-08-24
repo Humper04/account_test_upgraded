@@ -1,0 +1,18 @@
+Title: Slight login fix and hard password recovery fix
+
+Changes:
+login.php:
+- Removed getuserip() function as it already exists in connect.php
+password_recovery.php:
+- Added check to see if an account exists with the email address
+- Adds an extra step to ensure an email is provided
+- Give feedback to the user if any error occurs
+- Added html form for the user to input their password
+- Changed to use mysqli instead of pdo
+- Changed to be able to send mails through gmail
+reset_password.php:
+- Changed to use mysqli instead of pdo
+- Used bind_param and get_result to bind parameters and fetching results
+- Added error handling
+- Added isset around user in the check if the request method is not not a post
+- Included .env file and put in the google app password

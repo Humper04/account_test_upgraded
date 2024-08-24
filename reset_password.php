@@ -9,9 +9,11 @@ if (isset($_GET['token'])) {
     $token = $_GET['token'];
 
     // Prepare a statement to retrieve the token from the database
-    $stmt = $pdo->prepare("SELECT email, expires FROM password_recovery WHERE token = ? AND expires > NOW()");
-    $stmt->execute([$token]);
-    $user = $stmt->fetch();
+    $stmt = $conn->prepare("SELECT email, expires FROM password_recovery WHERE token = ? AND expires > NOW()");
+    $stmt->bind_param("s", $token);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
 
     // Check if the token is valid
     if ($user) {
@@ -23,12 +25,14 @@ if (isset($_GET['token'])) {
                 $new_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
                 // Update the user's password
-                $update = $pdo->prepare("UPDATE user_info SET password = ? WHERE email = ?");
-                $update->execute([$new_password, $user['email']]);
+                $update = $conn->prepare("UPDATE user_info SET password = ? WHERE email = ?");
+                $update->bind_param("ss", $new_password, $user['email']);
+                $update->execute();
 
                 // Delete the token from the database to prevent reuse
-                $delete = $pdo->prepare("DELETE FROM password_recovery WHERE token = ?");
-                $delete->execute([$token]);
+                $delete = $conn->prepare("DELETE FROM password_recovery WHERE token = ?");
+                $delete->bind_param("s", $token);
+                $delete->execute();
 
                 $message = "Your password has been reset successfully. <a href='login.php'>Login here</a>.";
             } else {
@@ -52,7 +56,7 @@ if (isset($_GET['token'])) {
 <body>
     <h1>Reset Your Password</h1>
     <p><?= htmlspecialchars($message) ?></p>
-    <?php if ($user && $_SERVER['REQUEST_METHOD'] !== 'POST'): ?>
+    <?php if (isset($user) && $_SERVER['REQUEST_METHOD'] !== 'POST'): ?>
     <form action="reset_password.php?token=<?= htmlspecialchars($token) ?>" method="post">
         New Password: <input type="password" name="password" required><br>
         Confirm Password: <input type="password" name="confirm_password" required><br>
