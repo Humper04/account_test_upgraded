@@ -1,0 +1,108 @@
+<?php
+require 'connect.php';
+require '/var/www/vendor/autoload.php';  // Ensure this path is correct
+use RobThree\Auth\TwoFactorAuth;
+
+session_start();
+
+$message = '';
+
+// Rate Limiting Check
+if (isset($_SESSION['login_attempts']) && $_SESSION['login_attempts'] >= 5) {
+    if (isset($_SESSION['block_time']) && (time() - $_SESSION['block_time']) <= 5) {
+        die('You have been locked out of your account for 60 seconds due to multiple failed login attempts.');
+    } else {
+        unset($_SESSION['login_attempts'], $_SESSION['block_time']);
+    }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $login = $_POST['login'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $mfa_code = $_POST['mfa_code'] ?? ''; // MFA code input by user
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT); // Hashing the password for logging
+    $ip_address = getUserIP(); // Ensure getUserIP() function is defined
+
+    // Determine log filename based on the outcome
+    $time_stamp = date('Y-m-d-H-i-s');
+    $logDirectory = 'logs/';
+    if (!file_exists($logDirectory)) {
+        mkdir($logDirectory, 0755, true); // Ensure the directory exists
+    }
+
+    // Check login credentials
+    $stmt = runQuery("SELECT id, username, password, mfa_secret FROM user_info WHERE username = ? OR email = ? OR phone = ?", "sss", [$login, $login, $login]);
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+        if (password_verify($password, $user['password'])) {
+            // Check for MFA
+            if (!empty($user['mfa_secret'])) {
+                // MFA is enabled, verify the code
+                if (!empty($mfa_code)) {
+                    $tfa = new TwoFactorAuth('PPP4');
+                    if (!$tfa->verifyCode($user['mfa_secret'], $mfa_code, 2)) { // Allow a slight time drift
+                        $message = "Incorrect 2FA code.";
+                    } else {
+                        // MFA verification successful, log in the user
+                        $_SESSION['user_logged_in'] = true;
+                        $_SESSION['username'] = $user['username'];
+                        $_SESSION['user_id'] = $user['id'];
+                        session_regenerate_id(true);
+                        header("Location: index.php");
+                        exit();
+                    }
+                } else {
+                    $message = "2FA code is required.";
+                }
+            } else {
+                // No MFA setup, proceed to log in
+                $_SESSION['user_logged_in'] = true;
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['user_id'] = $user['id'];
+                session_regenerate_id(true);
+                header("Location: index.php");
+                exit();
+            }
+        } else {
+            $message = "Incorrect login information.";
+        }
+    } else {
+        $message = "Incorrect login information.";
+    }
+    
+    // Increment or set login attempts if failed
+    $_SESSION['login_attempts'] = ($_SESSION['login_attempts'] ?? 0) + 1;
+    if ($_SESSION['login_attempts'] >= 5) {
+        $_SESSION['block_time'] = time(); // Set the block time
+    }
+
+    // Log the attempt
+    $logContent = "Username, email or phone number = " . $login . "\nPassword = " . $hashed_password . "\nIP = " . $ip_address . "\n";
+    $logFilename = $logDirectory . "login_attempt_" . $time_stamp . ".log";
+    file_put_contents($logFilename, $logContent, FILE_APPEND);
+    }
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <?php if (!empty($message)): ?>
+        <p><?= htmlspecialchars($message) ?></p>
+    <?php endif; ?>
+    <form method="post">
+        Username/Email/Phone: <input type="text" name="login" required><br>
+        Password: <input type="password" name="password" required><br>
+        MFA Code (if applicable): <input type="text" name="mfa_code"><br>
+        <input type="submit" value="Login">
+    </form>
+    <!-- Password recovery link -->
+    <p><a href="password_recovery.php">Forgot your password?</a></p>
+    <!-- Registration link -->
+    <p>Don't have an account? <a href="register.php">Register here</a></p>
+</body>
+</html>

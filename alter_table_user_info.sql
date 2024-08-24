@@ -1,0 +1,1 @@
+ALTER TABLE user_info ADD mfa_secret VARCHAR(255) DEFAULT NULL;

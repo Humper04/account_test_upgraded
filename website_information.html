@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Information and Features</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Website Information and Features</h1>
+    <h2>Security Measures</h2>
+    <ul>
+        <li><strong>Password Hashing:</strong> Passwords are securely hashed using bcrypt before being stored or logged, ensuring they are never exposed in plain text.</li>
+        <li><strong>Session Management:</strong> Sessions are managed securely with session IDs regenerated upon login to prevent session fixation attacks.</li>
+        <li><strong>SQL Injection Prevention:</strong> All SQL queries are conducted using prepared statements to prevent SQL injection vulnerabilities.</li>
+        <li><strong>Rate Limiting:</strong> Login attempts are limited to prevent brute force attacks, with users locked out after several failed attempts.</li>
+        <li><strong>Password Recovery:</strong> A robust password recovery system allows users to securely reset their passwords using a multi-step process involving email verification and time-limited tokens.</li>
+        <li><strong>Multi-factor Authentication (MFA):</strong> Users can enhance their account security by setting up or removing MFA, which requires not only a password but also a verification code from an authenticator app to complete the login process or to remove it.</li>
+    </ul>
+
+    <h2>User-Friendly Features</h2>
+    <ul>
+        <li><strong>Consistent Validation:</strong> Email and phone number validation are consistently enforced across both registration and profile modification to maintain data integrity.</li>
+        <li><strong>Intuitive Navigation:</strong> Direct links between login, registration, profile modification, and MFA setup or removal pages facilitate user navigation and enhance user experience.</li>
+        <li><strong>Clear Error Messages:</strong> User feedback does not disclose specific security settings while providing clear, actionable messages. Enhanced error messaging now clarifies when usernames, emails, and/or phone numbers are already in use.</li>
+        <li><strong>Accessible Account Recovery Options:</strong> Users can easily access account recovery options, enhancing user experience during credential recovery scenarios.</li>
+        <li><strong>MFA Setup and Removal:</strong> Provides users with the ability to set up or remove Multi-factor Authentication directly from their profile for enhanced security management.</li>
+    </ul>
+
+    <h2>Error Handling and Logging</h2>
+    <ul>
+        <li><strong>Log Management:</strong> Both successful and unsuccessful login attempts are logged with details such as username/email/phone number, hashed password, and IP address for auditing purposes.</li>
+        <li><strong>Input Validation:</strong> Input validation for emails and phone numbers is rigorously applied to prevent incorrect data submissions and enhance security.</li>
+    </ul>
+</body>
+</html>
