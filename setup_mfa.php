@@ -23,7 +23,7 @@ if ($userId <= 0) {
     exit;
 }
 
-$tfa = new TwoFactorAuth('PPP4');
+$tfa = new TwoFactorAuth('Login JM');
 $secret = $_SESSION['mfa_secret'] ?? '';
 
 // Generate a new secret and display QR if not already done
@@ -39,7 +39,7 @@ if (!$secret) {
         echo "Error preparing statement: " . $conn->error;
     }
 
-    $qrCodeUrl = $tfa->getQRCodeImageAsDataUri('PPP4', $secret);
+    $qrCodeUrl = $tfa->getQRCodeImageAsDataUri('Login JM', $secret);
 }
 
 // Check if the verification code is submitted
