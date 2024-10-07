@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get User Timezone</title>
+</head>
+<body>
+
+<h1>Getting User Time Zone</h1>
+<p id="status">Detecting your time zone...</p>
+
+<script>
+// Get the user's time zone
+var userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+// Function to send the time zone to the server using AJAX
+function sendTimezone(timezone) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "process_timezone.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Successfully sent, update the status
+            document.getElementById("status").innerText = "Time zone sent: " + timezone;
+        }
+    };
+    xhr.send("timezone=" + encodeURIComponent(timezone));
+}
+
+// Send the time zone to the server when the page loads
+window.onload = function() {
+    sendTimezone(userTimeZone);
+};
+</script>
+
+</body>
+</html>

@@ -55,7 +55,7 @@ if (isset($_GET['token'])) {
 </head>
 <body>
     <h1>Reset Your Password</h1>
-    <p><?= htmlspecialchars($message) ?></p>
+    <p><?= $message ?></p>
     <?php if (isset($user) && $_SERVER['REQUEST_METHOD'] !== 'POST'): ?>
     <form action="reset_password.php?token=<?= htmlspecialchars($token) ?>" method="post">
         New Password: <input type="password" name="password" required><br>
