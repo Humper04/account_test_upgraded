@@ -7,6 +7,11 @@ session_start();
 
 $message = '';
 
+// Capture time zone from POST data and store it in the session
+if (isset($_POST['timezone'])) {
+    $_SESSION['timezone'] = $_POST['timezone'];
+}
+
 // Rate Limiting Check
 if (isset($_SESSION['login_attempts']) && $_SESSION['login_attempts'] >= 5) {
     if (isset($_SESSION['block_time']) && (time() - $_SESSION['block_time']) <= 5) {
@@ -16,35 +21,26 @@ if (isset($_SESSION['login_attempts']) && $_SESSION['login_attempts'] >= 5) {
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     $login = $_POST['login'] ?? '';
     $password = $_POST['password'] ?? '';
     $mfa_code = $_POST['mfa_code'] ?? ''; // MFA code input by user
     $hashed_password = password_hash($password, PASSWORD_DEFAULT); // Hashing the password for logging
-    $ip_address = getUserIP(); // Ensure getUserIP() function is defined
-
-    // Determine log filename based on the outcome
-    $time_stamp = date('Y-m-d-H-i-s');
-    $logDirectory = 'logs/';
-    if (!file_exists($logDirectory)) {
-        mkdir($logDirectory, 0755, true); // Ensure the directory exists
-    }
+    // $ip_address = getUserIP(); // Ensure getUserIP() function is defined
 
     // Check login credentials
     $stmt = runQuery("SELECT id, username, password, mfa_secret FROM user_info WHERE username = ? OR email = ? OR phone = ?", "sss", [$login, $login, $login]);
-    $result = $stmt->get_result();
-    if ($result->num_rows > 0) {
+    $result = $stmt;
+    if ($stmt->num_rows > 0) {
         $user = $result->fetch_assoc();
         if (password_verify($password, $user['password'])) {
             // Check for MFA
             if (!empty($user['mfa_secret'])) {
-                // MFA is enabled, verify the code
                 if (!empty($mfa_code)) {
                     $tfa = new TwoFactorAuth('PPP4');
-                    if (!$tfa->verifyCode($user['mfa_secret'], $mfa_code, 2)) { // Allow a slight time drift
+                    if (!$tfa->verifyCode($user['mfa_secret'], $mfa_code, 2)) {
                         $message = "Incorrect 2FA code.";
                     } else {
-                        // MFA verification successful, log in the user
                         $_SESSION['user_logged_in'] = true;
                         $_SESSION['username'] = $user['username'];
                         $_SESSION['user_id'] = $user['id'];
@@ -56,10 +52,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $message = "2FA code is required.";
                 }
             } else {
-                // No MFA setup, proceed to log in
                 $_SESSION['user_logged_in'] = true;
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['user_id'] = $user['id'];
+		$_SESSION['email'] = $user['email'];
                 session_regenerate_id(true);
                 header("Location: index.php");
                 exit();
@@ -76,11 +72,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($_SESSION['login_attempts'] >= 5) {
         $_SESSION['block_time'] = time(); // Set the block time
     }
-
-    // Log the attempt
-    $logContent = "Username, email or phone number = " . $login . "\nPassword = " . $hashed_password . "\nIP = " . $ip_address . "\n";
-    $logFilename = $logDirectory . "login_attempt_" . $time_stamp . ".log";
-    file_put_contents($logFilename, $logContent, FILE_APPEND);
 }
 ?>
 <!DOCTYPE html>
@@ -98,11 +89,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         Username/Email/Phone: <input type="text" name="login" required><br>
         Password: <input type="password" name="password" required><br>
         MFA Code (if applicable): <input type="text" name="mfa_code"><br>
+        <input type="hidden" id="timezone" name="timezone">
         <input type="submit" value="Login">
     </form>
-    <!-- Password recovery link -->
+
+    <script>
+        // Use JavaScript to capture the user's time zone and insert it into the hidden form field
+        document.getElementById('timezone').value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    </script>
+
     <p><a href="password_recovery.php">Forgot your password?</a></p>
-    <!-- Registration link -->
     <p>Don't have an account? <a href="register.php">Register here</a></p>
 </body>
 </html>

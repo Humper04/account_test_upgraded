@@ -57,6 +57,15 @@ function runQuery($sql, $types = null, $params = []) {
         return false;
     }
 
+    // Fetch results if it's a SELECT query
+    if (strpos($sql, 'SELECT') === 0) {
+        $result = $stmt->get_result();
+        $stmt->close(); // Close the statement after fetching results
+        return $result;
+    }
+
+    // For INSERT, UPDATE, DELETE
+    $stmt->close(); // Close the statement after execution
     return $stmt;
 }
 

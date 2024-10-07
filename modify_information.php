@@ -1,4 +1,4 @@
-<?php
+    <?php
 require 'connect.php';
 session_start();
 
@@ -14,7 +14,7 @@ function isValidEmail($email) {
 }
 
 function isValidPhone($phone) {
-    return preg_match('/^(\+(\d{1,3})\s?)?(\d{10,12})$|^0(\d{9,11})$/', $phone);
+    return preg_match('/^(\\+(\\d{1,3})\\s?)?(\\d{10,12})$|^0(\\d{9,11})$/', $phone);
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -43,17 +43,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-function updateUserInfo($current_username, $new_username, $email, $phone, $password) {
+function updateUserInfo($current_username, $new_username, $email, $phone, $password)
+{
     global $conn;
-    $sql = "UPDATE user_info SET username = ?, email = ?, phone = ?" . (!empty($password) ? ", password = ?" : "") . " WHERE username = ?";
-    $types = 'ss' . (!empty($password) ? 's' : '') . 's';
-    $params = [$new_username, $email, $phone];
-    if (!empty($password)) {
-        $params[] = $password;
+
+    try {
+        // Proceed with the update if the email check passes
+        $sql = "UPDATE user_info SET username = ?, email = ?, phone = ?" . (!empty($password) ? ", password = ?" : "") . " WHERE username = ?";
+        $types = 'sss' . (!empty($password) ? 's' : '') . 's';
+        $params = [$new_username, $email, $phone];
+
+        if (!empty($password)) {
+            $params[] = $password;
+        }
+
+        $params[] = $current_username;
+        $stmt = runQuery($sql, $types, $params);
+        return $stmt && $stmt->affected_rows > 0;
+    } catch (Exception $e) {
+        // Handle specific foreign key constraint error
+        if (strpos($e->getMessage(), 'Cannot delete or update a parent row: a foreign key constraint fails') !== false) {
+            echo "<script>alert('Error: The email is still associated with a password recovery process.');</script>";
+        } else {
+            // Log any other error message and display a generic error to the user
+            error_log("Update user info error: " . $e->getMessage());
+            echo "<script>alert('An error occurred while updating user information. Please try again later.');</script>";
+        }
+        return false; // Return false to indicate failure
     }
-    $params[] = $current_username;
-    $stmt = runQuery($sql, $types, $params);
-    return $stmt && $stmt->affected_rows > 0;
 }
 
 ?>

@@ -62,6 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['remove_mfa']) && !empt
             <button type="submit" name="remove_mfa">Remove MFA</button>
         </form>
     <?php endif; ?>
+    <a href='modify_information.php'>Modify Information</a>
 
     <p><a href="logout.php">Logout</a></p>
 </body>
