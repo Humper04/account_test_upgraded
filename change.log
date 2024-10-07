@@ -1,12 +1,5 @@
-Title: Changed password_recovery to be based on timezone (WIP)
-
-Added:
-get_timezone.html
-process_timezone.php
+Title: Added removal of password_recovery entries
 
 Changes:
-password_recovery.php:
-- Added timezone selection
-- Added invalid timezone error
-- reset_password.php:
-- Changed to not remove html special characters
+profile.php:
+- Added function to remove all users password_recovery entries

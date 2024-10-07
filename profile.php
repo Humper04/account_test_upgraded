@@ -39,6 +39,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['remove_mfa']) && !empt
     }
 }
 
+// Handle password recovery entries removal request
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['remove_password_recovery'])) {
+    $email = $user['email']; // Use the user's email to delete entries
+    $removeSql = "DELETE FROM password_recovery WHERE email = ?";
+    $removeStmt = $conn->prepare($removeSql);
+    $removeStmt->bind_param('s', $email);
+    
+    if ($removeStmt->execute()) {
+        echo "<p>All password recovery entries for this email have been successfully removed.</p>";
+    } else {
+        echo "<p>Failed to remove password recovery entries: " . htmlspecialchars($conn->error) . "</p>";
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,8 +76,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['remove_mfa']) && !empt
             <button type="submit" name="remove_mfa">Remove MFA</button>
         </form>
     <?php endif; ?>
-    <a href='modify_information.php'>Modify Information</a>
+    
+    <!-- Button to remove all password recovery entries -->
+    <form method="post">
+        <button type="submit" name="remove_password_recovery" onclick="return confirm('Are you sure you want to remove all password recovery entries for this email?');">Remove All Password Recovery Entries</button>
+    </form>
 
+    <p><a href='modify_information.php'>Modify Information</a></p>
     <p><a href="logout.php">Logout</a></p>
 </body>
 </html>
