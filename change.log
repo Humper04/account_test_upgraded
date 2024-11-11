@@ -1,5 +1,5 @@
-Title: Added removal of password_recovery entries
+Title: Update modify_information.php
 
 Changes:
-profile.php:
-- Added function to remove all users password_recovery entries
+modify_information.php:
+- Put everything in a try and catch block and made sure to ignore every empty entry in the form

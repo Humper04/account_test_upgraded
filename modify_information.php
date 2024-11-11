@@ -1,4 +1,4 @@
-    <?php
+<?php
 require 'connect.php';
 session_start();
 
@@ -48,16 +48,45 @@ function updateUserInfo($current_username, $new_username, $email, $phone, $passw
     global $conn;
 
     try {
-        // Proceed with the update if the email check passes
-        $sql = "UPDATE user_info SET username = ?, email = ?, phone = ?" . (!empty($password) ? ", password = ?" : "") . " WHERE username = ?";
-        $types = 'sss' . (!empty($password) ? 's' : '') . 's';
-        $params = [$new_username, $email, $phone];
+        // Build the update SQL query dynamically based on which fields are not empty
+        $fields = [];
+        $params = [];
+        $types = '';
 
-        if (!empty($password)) {
-            $params[] = $password;
+        if (!empty($new_username)) {
+            $fields[] = "username = ?";
+            $params[] = $new_username;
+            $types .= 's';
         }
 
-        $params[] = $current_username;
+        if (!empty($email)) {
+            $fields[] = "email = ?";
+            $params[] = $email;
+            $types .= 's';
+        }
+
+        if (!empty($phone)) {
+            $fields[] = "phone = ?";
+            $params[] = $phone;
+            $types .= 's';
+        }
+
+        if (!empty($password)) {
+            $fields[] = "password = ?";
+            $params[] = $password;
+            $types .= 's';
+        }
+
+        // If no fields to update, return true indicating no changes
+        if (empty($fields)) {
+            return true; // No updates to perform
+        }
+
+        // Construct the SQL query
+        $sql = "UPDATE user_info SET " . implode(", ", $fields) . " WHERE username = ?";
+        $params[] = $current_username; // Add current username to parameters
+        $types .= 's';
+
         $stmt = runQuery($sql, $types, $params);
         return $stmt && $stmt->affected_rows > 0;
     } catch (Exception $e) {
