@@ -7,8 +7,8 @@ $dotenv->load();
 
 $host = 'localhost';  // Server IP address or hostname
 $db = 'PPP4';         // Updated database name
-$user = 'login';
-$pass = $_ENV['DB_PASSWORD_LOGIN'];
+$user = 'root';
+$pass = $_ENV['DB_PASSWORD_ROOT'];
 $charset = 'utf8mb4';
 
 // Debug output - Uncomment if needed for debugging
