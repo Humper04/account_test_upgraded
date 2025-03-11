@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     // $ip_address = getUserIP(); // Ensure getUserIP() function is defined
 
     // Check login credentials
-    $stmt = runQuery("SELECT id, username, password, mfa_secret FROM user_info WHERE username = ? OR email = ? OR phone = ?", "sss", [$login, $login, $login]);
+    $stmt = runQuery("SELECT id, username, password, mfa_secret FROM user_info WHERE username = ? OR email = ? OR phone = ?", "sss", $login, $login, $login);
     $result = $stmt;
     if ($stmt->num_rows > 0) {
         $user = $result->fetch_assoc();
