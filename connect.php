@@ -37,25 +37,13 @@ $conn->set_charset($charset);
 function runQuery($sql, $types = null, ...$params) {
     global $conn;
 
-    // Check if at least one parameter is provided
-    if (empty($params)) {
-        error_log("Error: At least one parameter is required.");
-        return false;
-    }
-
-    // Check if $types and $params match in length
-    if ($types && strlen($types) !== count($params)) {
-        error_log("Parameter mismatch: Expected " . strlen($types) . " parameters, got " . count($params));
-        return false;
-    }
-
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
-        error_log("MySQL prepare error: " . $conn->error); // Log error to server's error log
+        error_log("MySQL prepare error: " . $conn->error);
         return false;
     }
 
-    if ($types && $params) {
+    if ($types && !empty($params)) {
         if (!$stmt->bind_param($types, ...$params)) {
             error_log("MySQL bind_param error: " . $stmt->error);
             return false;
@@ -67,5 +55,5 @@ function runQuery($sql, $types = null, ...$params) {
         return false;
     }
 
-    return $stmt;
+    return $stmt; // Return the statement object for further processing
 }

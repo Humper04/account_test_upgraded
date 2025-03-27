@@ -30,14 +30,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
     // Check login credentials
     $stmt = runQuery("SELECT id, username, password, mfa_secret FROM user_info WHERE username = ? OR email = ? OR phone = ?", "sss", $login, $login, $login);
-    $result = $stmt;
-    if ($stmt->num_rows > 0) {
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
         if (password_verify($password, $user['password'])) {
             // Check for MFA
             if (!empty($user['mfa_secret'])) {
                 if (!empty($mfa_code)) {
-                    $tfa = new TwoFactorAuth('PPP4');
+                    $tfa = new TwoFactorAuth('test');
                     if (!$tfa->verifyCode($user['mfa_secret'], $mfa_code, 2)) {
                         $message = "Incorrect 2FA code.";
                     } else {
