@@ -6,7 +6,7 @@ $dotenv = \Dotenv\Dotenv::createImmutable('/var/www/');
 $dotenv->load();
 
 $host = 'localhost';  // Server IP address or hostname
-$db = 'PPP4';         // Updated database name
+$db = 'login_system';         // Updated database name
 $user = 'root';
 $pass = $_ENV['DB_PASSWORD_ROOT'];
 $charset = 'utf8mb4';
