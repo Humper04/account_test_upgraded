@@ -50,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Register</title>
 </head>
 <body>
+    <h1>Register</h1>
     <div><?= htmlspecialchars($message) ?></div>
     <form method="post">
         Username: <input type="text" name="username" required><br>
