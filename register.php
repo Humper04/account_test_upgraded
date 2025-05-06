@@ -19,12 +19,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (empty($email) && empty($phone_number)) {
         $message = "At least one contact method (email or phone) must be provided.";
     } else {
-        $stmt = runQuery("SELECT * FROM user_info WHERE username = ? OR email = ? OR phone = ?", "sss", [$username, $email, $phone_number]);
+        $stmt = runQuery("SELECT * FROM user_info WHERE username = ? OR email = ? OR phone = ?", "sss", $username, $email, $phone_number);
         if ($stmt->get_result()->num_rows > 0) {
             $message = "Username, email and / or phone already in use.";
         } else {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = runQuery("INSERT INTO user_info (username, password, email, phone) VALUES (?, ?, ?, ?)", "ssss", [$username, $hashed_password, $email, $phone_number]);
+            $stmt = runQuery("INSERT INTO user_info (username, password, email, phone) VALUES (?, ?, ?, ?)", "ssss", $username, $hashed_password, $email, $phone_number);
             if ($stmt->affected_rows > 0) {
                 $_SESSION['user_logged_in'] = true;
                 $_SESSION['username'] = $username;
