@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (!empty($user['mfa_secret'])) {
                 // MFA is enabled, verify the code
                 if (!empty($mfa_code)) {
-                    $tfa = new TwoFactorAuth('PPP4');
+                    $tfa = new TwoFactorAuth('Login JM');
                     if (!$tfa->verifyCode($user['mfa_secret'], $mfa_code, 2)) { // Allow a slight time drift
                         $message = "Incorrect 2FA code.";
                     } else {

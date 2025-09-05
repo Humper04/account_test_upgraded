@@ -9,7 +9,7 @@ function verifyMFAToken($userId, $token) {
     $stmt->execute([$userId]);
     $secret = $stmt->fetchColumn();
 
-    $tfa = new TwoFactorAuth('PPP4');
+    $tfa = new TwoFactorAuth('Login JM');
     return $tfa->verifyCode($secret, $token, 2);  // Allow a 2-window for codes to account for possible time drift
 }
 

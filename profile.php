@@ -26,7 +26,7 @@ if (!$user) {
 
 // Handle MFA removal request
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['remove_mfa']) && !empty($_POST['mfa_code'])) {
-    $tfa = new TwoFactorAuth('PPP4');
+    $tfa = new TwoFactorAuth('Login JM');
     if ($tfa->verifyCode($user['mfa_secret'], $_POST['mfa_code'], 2)) {  // 2 = window for code verification
         // Code is correct, remove MFA
         $stmt = $conn->prepare("UPDATE user_info SET mfa_secret = NULL WHERE id = ?");

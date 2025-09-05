@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
             // Check for MFA
             if (!empty($user['mfa_secret'])) {
                 if (!empty($mfa_code)) {
-                    $tfa = new TwoFactorAuth('test');
+                    $tfa = new TwoFactorAuth('Login JM');
                     if (!$tfa->verifyCode($user['mfa_secret'], $mfa_code, 2)) {
                         $message = "Incorrect 2FA code.";
                     } else {

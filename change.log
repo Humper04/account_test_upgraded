@@ -1,5 +1,4 @@
-Title: Update modify_information.php
+Title: Change 2FA names
 
 Changes:
-modify_information.php:
-- Put everything in a try and catch block and made sure to ignore every empty entry in the form
+- Changed the 2FA names so all are the same (Login JM)
