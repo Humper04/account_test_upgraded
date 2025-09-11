@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_logged_in']) || !$_SESSION['user_logged_in']) {
 
 // Fetch user details and MFA status
 $userId = $_SESSION['user_id'] ?? 0;
-$stmt = $conn->prepare("SELECT username, email, mfa_secret FROM user_info WHERE id = ?");
+$stmt = $conn->prepare("SELECT username, email, phone, mfa_secret FROM user_info WHERE id = ?");
 $stmt->bind_param('i', $userId);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -64,6 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['remove_password_recove
     <h1>User Profile</h1>
     <p>Welcome, <?= htmlspecialchars($user['username']) ?></p>
     <p>Email: <?= htmlspecialchars($user['email']) ?></p>
+    <p>Phone: <?= htmlspecialchars($user['phone']) ?> </p>    
 
     <?php if (empty($user['mfa_secret'])): ?>
         <!-- No MFA setup, provide setup button -->

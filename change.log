@@ -1,4 +1,4 @@
-Title: Change 2FA names
+Title: Update profile.php
 
 Changes:
-- Changed the 2FA names so all are the same (Login JM)
+- Updated profile to also show phone number
