@@ -1,4 +1,5 @@
-Title: Update profile.php
+Title: Update setup_mfa.php
 
 Changes:
-- Updated profile to also show phone number
+- Changed to only push the mfa code to the database and session once it's been verified
+- Added the code for display on the page

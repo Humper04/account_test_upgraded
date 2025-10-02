@@ -29,25 +29,25 @@ $secret = $_SESSION['mfa_secret'] ?? '';
 // Generate a new secret and display QR if not already done
 if (!$secret) {
     $secret = $tfa->createSecret();
-    $_SESSION['mfa_secret'] = $secret;  // Store secret in session temporarily
-
-    $stmt = $conn->prepare("UPDATE user_info SET mfa_secret=? WHERE id=?");
-    if ($stmt) {
-        $stmt->bind_param('si', $secret, $userId);
-        $stmt->execute();
-    } else {
-        echo "Error preparing statement: " . $conn->error;
-    }
 
     $qrCodeUrl = $tfa->getQRCodeImageAsDataUri('Login JM', $secret);
 }
 
 // Check if the verification code is submitted
 $verificationCode = $_POST['verificationCode'] ?? '';
-if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($verificationCode)) {
-    if ($tfa->verifyCode($secret, $verificationCode, 2)) {  // 2 = window for code verification
+$postedSecret = $_POST['secret'] ?? '';
+if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($verificationCode) && !empty($postedSecret)) {
+    if ($tfa->verifyCode($postedSecret, $verificationCode, 2)) {  // 2 = window for code verification
         // Verification success
-        unset($_SESSION['mfa_secret']);  // Clear the secret from the session
+        // Save the secret to the database and session now
+        $stmt = $conn->prepare("UPDATE user_info SET mfa_secret=? WHERE id=?");
+        if ($stmt) {
+            $stmt->bind_param('si', $postedSecret, $userId);
+            $stmt->execute();
+        } else {
+            echo "Error preparing statement: " . $conn->error;
+        }
+        $_SESSION['mfa_secret'] = $postedSecret;  // Store in session
         header("Location: profile.php"); // Redirect to profile page on successful verification
         exit;
     } else {
@@ -68,7 +68,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($verificationCode)) {
     <?php if (!empty($qrCodeUrl)): ?>
         <p>Scan this QR code with your MFA app to set up authentication:</p>
         <img src="<?= htmlspecialchars($qrCodeUrl) ?>" alt="MFA QR Code">
+        <p>If the QR-code does not work, input the following code into your 2FA app: <?= htmlspecialchars($secret) ?></p>
         <form method="post">
+            <input type="hidden" name="secret" value="<?= htmlspecialchars($secret) ?>">
             <label for="verificationCode">Enter the code from the app:</label>
             <input type="text" id="verificationCode" name="verificationCode" required>
             <button type="submit">Verify</button>
