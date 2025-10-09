@@ -27,9 +27,14 @@ function sendPasswordReset($email) {
         $token = bin2hex(random_bytes(32));
 
         // Store token in the database with the correct expiration time
-        $stmt = runQuery("INSERT INTO password_recovery (email, token, expires) VALUES (?, ?, ?)", 
-                         "sss", 
-                         [$email, $token, $expires->format('Y-m-d H:i:s')]);
+        $stmt = runQuery(
+            "INSERT INTO password_recovery (email, token, expires) VALUES (?, ?, ?)",
+            "sss",
+            $email,
+            $token,
+            $expires->format('Y-m-d H:i:s')
+        );
+
 
         if ($stmt) {
             // Send recovery email using PHPMailer

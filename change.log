@@ -1,5 +1,4 @@
-Title: Update setup_mfa.php
+Title: Update password_recovery.php
 
 Changes:
-- Changed to only push the mfa code to the database and session once it's been verified
-- Added the code for display on the page
+- Fixed parameter issue so it's amtching with connect.php
