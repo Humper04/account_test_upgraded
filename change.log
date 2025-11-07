@@ -1,4 +1,6 @@
-Title: Update password_recovery.php
+Title: Fixed a few things and added link in profile
 
 Changes:
-- Fixed parameter issue so it's amtching with connect.php
+- Added link to verify_mfa in profile
+- Added unique key for email in create_table_password_recovery
+- Rewrote verify_mfa to make sure it's fully working

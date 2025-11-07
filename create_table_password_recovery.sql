@@ -1,3 +1,5 @@
+ALTER TABLE user_info
+ADD UNIQUE KEY (email);
 CREATE TABLE password_recovery (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL,

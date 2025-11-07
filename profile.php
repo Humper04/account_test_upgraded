@@ -84,6 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['remove_password_recove
     </form>
 
     <p><a href='modify_information.php'>Modify Information</a></p>
+    <p><a href='verify_mfa.php'>Verify MFA</a></p>
     <p><a href="logout.php">Logout</a></p>
 </body>
 </html>
