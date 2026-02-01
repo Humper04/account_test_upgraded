@@ -1,5 +1,5 @@
 <?php
-require '/var/www/vendor/autoload.php';  // Ensure Composer's autoloader is included
+require '../vendor/autoload.php';  // Ensure Composer's autoloader is included
 require 'connect.php';  // Your database connection settings
 
 use PHPMailer\PHPMailer\PHPMailer;

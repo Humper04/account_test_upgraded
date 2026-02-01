@@ -1,8 +1,8 @@
 <?php
 
-require_once '/var/www/vendor/autoload.php';
+require_once '../vendor/autoload.php';
 
-$dotenv = \Dotenv\Dotenv::createImmutable('/var/www/');
+$dotenv = \Dotenv\Dotenv::createImmutable('../');
 $dotenv->load();
 
 $host = 'localhost';  // Server IP address or hostname

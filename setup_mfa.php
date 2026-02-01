@@ -1,6 +1,6 @@
 <?php
 require 'connect.php';  // Ensure the path to connect.php is correct
-require '/var/www/vendor/autoload.php';  // Ensure this path is correct
+require '../vendor/autoload.php';  // Ensure this path is correct
 
 use RobThree\Auth\TwoFactorAuth;
 

@@ -1,11 +1,11 @@
 <?php
-require '/var/www/vendor/autoload.php';  // Ensure Composer's autoloader is included
+require '../vendor/autoload.php';  // Ensure Composer's autoloader is included
 require 'connect.php';  // Your database connection settings
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-$dotenv = \Dotenv\Dotenv::createImmutable('/var/www/');
+$dotenv = \Dotenv\Dotenv::createImmutable('../');
 $dotenv->load();
 
 function sendPasswordReset($email) {

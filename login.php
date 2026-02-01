@@ -1,6 +1,6 @@
 <?php
 require 'connect.php';
-require '/var/www/vendor/autoload.php';
+require '../vendor/autoload.php';
 use RobThree\Auth\TwoFactorAuth;
 
 session_start();
