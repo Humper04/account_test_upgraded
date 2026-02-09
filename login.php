@@ -79,18 +79,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
+
+<div class="login-container">
     <h1>Login</h1>
+
     <?php if (!empty($message)): ?>
-        <p><?= htmlspecialchars($message) ?></p>
+        <div class="message"><?= htmlspecialchars($message) ?></div>
     <?php endif; ?>
+
     <form method="post">
-        Username/Email/Phone: <input type="text" name="login" required><br>
-        Password: <input type="password" name="password" required><br>
-        MFA Code (if applicable): <input type="text" name="mfa_code"><br>
+        <div class="form-group">
+            <label>Username / Email / Phone</label>
+            <input type="text" name="login" required>
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" required>
+        </div>
+
+        <div class="form-group">
+            <label>MFA code (if applicable)</label>
+            <input type="text" name="mfa_code">
+        </div>
         <input type="hidden" id="timezone" name="timezone">
-        <input type="submit" value="Login">
+        <button type="submit" name="login">Login</button>
     </form>
 
     <script>
@@ -98,7 +115,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         document.getElementById('timezone').value = Intl.DateTimeFormat().resolvedOptions().timeZone;
     </script>
 
-    <p><a href="password_recovery.php">Forgot your password?</a></p>
-    <p>Don't have an account? <a href="register.php">Register here</a></p>
+    <div class="links">
+        <p><a href="password_recovery.php">Forgot your password?</a></p>
+        <p>Don't have an account? <a href="register.php">Register here</a></p>
+    </div>
+</div>
+
 </body>
 </html>

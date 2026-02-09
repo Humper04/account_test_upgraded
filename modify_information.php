@@ -89,11 +89,56 @@ function updateUserInfo($current_username, $new_username, $email, $phone, $passw
 }
 
 ?>
-<form method="post">
-    New Username: <input type="text" name="new_username" value="<?= htmlspecialchars($_SESSION['username']) ?>"><br>
-    Email: <input type="text" name="email"><br>
-    Phone: <input type="text" name="phone"><br>
-    Password: <input type="password" name="password"><br>
-    <input type="submit" value="Update Information">
-</form>
-<div><?= htmlspecialchars($message) ?></div>
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Modify Information</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="modify_information.css">
+</head>
+<body>
+
+<div class="form-container">
+    <h1>Modify Information</h1>
+
+    <?php if (!empty($message)): ?>
+        <div class="message"><?= htmlspecialchars($message) ?></div>
+    <?php endif; ?>
+
+    <form method="post">
+        <div class="form-group">
+            <label for="new_username">New Username</label>
+            <input
+                type="text"
+                id="new_username"
+                name="new_username"
+                value="<?= htmlspecialchars($_SESSION['username']) ?>">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email">
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" id="phone" name="phone">
+        </div>
+
+        <div class="form-group">
+            <label for="password">New Password</label>
+            <input type="password" id="password" name="password">
+        </div>
+
+        <button type="submit" class="btn primary">Update Information</button>
+    </form>
+
+    <div class="links">
+        <a href="profile.php">← Back to Profile</a>
+    </div>
+</div>
+
+</body>
+</html>
+

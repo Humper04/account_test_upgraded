@@ -48,19 +48,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="register.css">
 </head>
 <body>
+
+<div class="register-container">
     <h1>Register</h1>
-    <div><?= htmlspecialchars($message) ?></div>
+
+    <?php if (!empty($message)): ?>
+        <div class="message"><?= htmlspecialchars($message) ?></div>
+    <?php endif; ?>
+
     <form method="post">
-        Username: <input type="text" name="username" required><br>
-        Password: <input type="password" name="password" required><br>
-        Confirm Password: <input type="password" name="confirm_password" required><br>
-        Email: <input type="text" name="email"><br>
-        Phone Number: <input type="text" name="phone_number"><br>
-        <input type="submit" value="Register">
-        <input type="submit" name="register_with_mfa" value="Register with MFA">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="confirm_password">Confirm password</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email">
+        </div>
+
+        <div class="form-group">
+            <label for="phone_number">Phone number (optional)</label>
+            <input type="text" id="phone_number" name="phone_number">
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn primary">Register</button>
+            <button type="submit" name="register_with_mfa" class="btn secondary">
+                Register with MFA
+            </button>
+        </div>
     </form>
-    <p>Already have an account? <a href="login.php">Login here</a>.</p>
+
+    <div class="links">
+        <p>Already have an account?
+            <a href="login.php">Login here</a>
+        </p>
+    </div>
+</div>
 </body>
 </html>

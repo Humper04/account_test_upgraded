@@ -1,0 +1,136 @@
+:root {
+    --olive: #6b8e23;
+    --blue: #1e3a5f;
+    --yellow: #f4d35e;
+    --danger: #b00020;
+    --light-bg: #f5f7fa;
+    --text-dark: #333;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--blue), var(--olive));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.profile-container {
+    background: #fff;
+    width: 100%;
+    max-width: 500px;
+    padding: 2rem;
+    border-radius: 18px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.profile-container h1 {
+    text-align: center;
+    color: var(--blue);
+    margin-bottom: 1.5rem;
+}
+
+.profile-info p {
+    margin: 0.4rem 0;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+}
+
+.profile-actions {
+    margin-top: 1.5rem;
+}
+
+.mfa-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+input[type="text"] {
+    padding: 0.6rem 0.7rem;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    font-size: 1rem;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--yellow);
+    box-shadow: 0 0 0 3px rgba(244, 211, 94, 0.4);
+}
+
+.btn {
+    display: inline-block;
+    text-align: center;
+    padding: 0.7rem;
+    border-radius: 10px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.btn.primary {
+    background: var(--olive);
+    color: #fff;
+}
+
+.btn.primary:hover {
+    background: #5f7f1e;
+}
+
+.btn.danger {
+    background: var(--danger);
+    color: #fff;
+}
+
+.btn.danger:hover {
+    background: #8b0018;
+}
+
+.profile-links {
+    margin-top: 1.8rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+.profile-links a {
+    color: var(--blue);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.profile-links a:hover {
+    text-decoration: underline;
+}
+
+.profile-links .logout {
+    color: var(--danger);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .profile-container {
+        padding: 1.5rem;
+    }
+
+    .profile-links {
+        flex-direction: column;
+        gap: 0.7rem;
+        text-align: center;
+    }
+}
