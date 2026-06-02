@@ -1,6 +1,4 @@
-Title: Fixed a few things and added link in profile
+Title: Update account_test
 
 Changes:
-- Added link to verify_mfa in profile
-- Added unique key for email in create_table_password_recovery
-- Rewrote verify_mfa to make sure it's fully working
+- Updated the account_test repository
