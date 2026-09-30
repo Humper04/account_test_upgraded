@@ -10,6 +10,10 @@ How the engineering skills should consume this repo's domain documentation when 
 
 If any of these files don't exist, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The `/domain-modeling` skill (reached via `/grill-with-docs` and `/improve-codebase-architecture`) creates them lazily when terms or decisions actually get resolved.
 
+## Sensitive information
+
+Keep `CONTEXT.md` and ADRs free of credentials, tokens, and live configuration values. Describe configuration using variable names or redacted examples, and respect maintainer-provided no-read boundaries.
+
 ## File structure
 
 Single-context repo (the layout used here):

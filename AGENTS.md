@@ -1,6 +1,6 @@
 # Agent instructions
 
-Use this project's `CONTEXT.md` for domain terms and boundaries. Follow `docs/agents/domain.md` when consulting context and ADRs. Treat `.env` files and local credentials as sensitive; use examples or placeholders, never secret values.
+Use this project's `CONTEXT.md` for domain terms and boundaries. Follow `docs/agents/domain.md` when consulting context and ADRs. Do not open `.env` files or maintainer-marked credential files; use `.env.example` where available or redacted configuration for structure, and never copy secret values into docs or issues.
 
 ## Agent skills
 
